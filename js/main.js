@@ -7,7 +7,8 @@ $(document).ready(() => {
 });
 
 function getMovies(searchText) {
-    axios.get('http://www.omdbapi.com/?i=tt3896198&apikey=f6318a9&s=' + searchText)
+    var temp='http://www.omdbapi.com/?i=tt3896198&apikey=f6318a9&s=';
+    axios.get((temp+searchText)  || ( process.env.db_url + searchText))
         .then((response) => {
             console.log(response);
             let movies = response.data.Search;
@@ -71,8 +72,9 @@ function displayFavourite() {
 
 function getMovie() {
     let movieId = sessionStorage.getItem('movieId');
+    var temp='http://www.omdbapi.com/?&apikey=f6318a9&i=';
 
-    axios.get('http://www.omdbapi.com/?&apikey=f6318a9&i=' + movieId)
+    axios.get((temp+movieId)  || ( process.env.db_url1  + movieId))
         .then((response) => {
             console.log(response);
             let movie = response.data;

@@ -5,15 +5,17 @@ $(document).ready(() => {
         e.preventDefault();
     });
 });
-
+// dynamic dispaly of movie
 function getMovies(searchText) {
     var temp='http://www.omdbapi.com/?i=tt3896198&apikey=f6318a9&s=';
+    // fetch the movie with reqiored
     axios.get((temp+searchText)  || ( process.env.db_url + searchText))
         .then((response) => {
             console.log(response);
             let movies = response.data.Search;
             let output = '';
             $.each(movies, (index, movie) => {
+                // dynamically create the content
                 output += `
                 <div class="col-md-3">
                 <div>
@@ -69,7 +71,7 @@ function displayFavourite() {
     }
     $('#movie1').html(output);
 }
-
+// get the movie from the local stire for favourite movie
 function getMovie() {
     let movieId = sessionStorage.getItem('movieId');
     var temp='http://www.omdbapi.com/?&apikey=f6318a9&i=';
@@ -78,7 +80,7 @@ function getMovie() {
         .then((response) => {
             console.log(response);
             let movie = response.data;
-
+//  create the content of the movie dynamically
             let output = `
             <div class="row">
             <div class="col-md-4">

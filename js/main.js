@@ -9,10 +9,17 @@ $(document).ready(() => {
 function getMovies(searchText) {
     var temp='http://www.omdbapi.com/?i=tt3896198&apikey=f6318a9&s=';
     // fetch the movie with reqiored
-    axios.get((temp+searchText)  || ( process.env.db_url + searchText))
-        .then((response) => {
-            console.log(response);
-            let movies = response.data.Search;
+
+    fetch((temp+searchText)  || ( process.env.db_url1  + searchText)).then(function (response) {
+    // The API call was successful!
+    if (response.ok) {
+        return response.json();
+    } else {
+        return Promise.reject(response);
+    }
+}).then(function (data) {
+    // This is the JSON from our response
+    let movies = data.Search;
             let output = '';
             $.each(movies, (index, movie) => {
                 // dynamically create the content
@@ -31,11 +38,13 @@ function getMovies(searchText) {
             });
 
             $('#movies').html(output);
+    console.log(data);
+}).catch(function (err) {
+    // There was an error
+    console.warn('Something went wrong.', err);
+});
 
-        })
-        .catch((err) => {
-            console.log(err);
-        });
+
 }
 
 function movieSelected(id) {
@@ -75,11 +84,15 @@ function displayFavourite() {
 function getMovie() {
     let movieId = sessionStorage.getItem('movieId');
     var temp='http://www.omdbapi.com/?&apikey=f6318a9&i=';
-
-    axios.get((temp+movieId)  || ( process.env.db_url1  + movieId))
-        .then((response) => {
-            console.log(response);
-            let movie = response.data;
+    fetch((temp+movieId)  || ( process.env.db_url1  + movieId)).then(function (response) {
+    // The API call was successful!
+    if (response.ok) {
+        return response.json();
+    } else {
+        return Promise.reject(response);
+    }
+}).then(function (data) {
+     let movie =data;
 //  create the content of the movie dynamically
             let output = `
             <div class="row">
@@ -116,11 +129,11 @@ function getMovie() {
             `;
 
             $('#movie').html(output);
+    // This is the JSON from our response
+    console.log(data);
+}).catch(function (err) {
+    // There was an error
+    console.warn('Something went wrong.', err);
+});
 
-
-
-        })
-        .catch((err) => {
-            console.log(err);
-        });
 }
